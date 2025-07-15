@@ -1,0 +1,19 @@
+[global]
+frame_color = "{color2}"
+font = "MonaspiceKr NF 10"
+padding = 10
+corner_radius = 15
+separator_color= frame
+
+[urgency_low]
+background = "{color1}"
+foreground = "{foreground}"
+
+[urgency_normal]
+background = "{color3}"
+foreground = "{foreground}"
+
+[urgency_critical]
+background = "{color7}"
+foreground = "{foreground}"
+frame_color = "#ef9f76"

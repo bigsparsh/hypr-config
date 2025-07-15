@@ -199,6 +199,9 @@ return {
 			},
 		},
 		config = function()
+			require("lspconfig").qmlls.setup({
+				cmd = { "qmlls", "-E" },
+			})
 			-- Brief aside: **What is LSP?**
 			--
 			-- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -243,7 +246,7 @@ return {
 
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
-					map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
+					map("<leader>ra", vim.lsp.buf.rename, "[R]e[n]ame")
 
 					-- Execute a code action, usually your cursor needs to be on top of an error
 					-- or a suggestion from your LSP for this to activate.

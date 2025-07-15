@@ -3,10 +3,16 @@ play = [
 	{ run = 'vlc "$@"', desc = "vlc", orphan = true, for = "unix" }
 ]
 img = [
-	{ run = 'feh "$@"', desc = "feh", orphan = true, for = "unix" }
+	{ run = 'feh --start-at "$@" .', desc = "feh", orphan = true, for = "unix" }
+]
+
+pdfs = [
+	{ run = 'zathura "$@"', desc = "feh", orphan = true, for = "unix" }
 ]
 
 [open]
 rules = [
 	{ mime = "image/*", use = "img" },
+	{ mime = "video/*", use = "play"},
+	{ mime = "application/pdf", use = "pdfs"}
 ]

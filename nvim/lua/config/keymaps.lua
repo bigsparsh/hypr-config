@@ -1,15 +1,10 @@
 vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", {
 	desc = "Saving current file",
 })
--- vim.keymap.set("n", "<leader>/", "<leader>gcc", {
--- 	desc = "Comment current line",
--- })
 
--- vim.keymap.set("n", "<leader>x", "<cmd>bw<CR>", {
--- 	desc = "Removing current Buffer",
--- })
+vim.keymap.set("n", "Esc", "<cmd>noh<CR>", { desc = "Remove the highlighting after search or exit from currrent mode" })
 
-vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Go Half Page Down" })
+vim.keymap.set("n", "<c-d>", "<c-d>zz", { desc = "go half page down" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Go Half Page Up" })
 
 vim.keymap.set("n", "h", "hzz", { desc = "Go Left" })
@@ -18,6 +13,8 @@ vim.keymap.set("n", "k", "kzz", { desc = "Go Up" })
 vim.keymap.set("n", "l", "lzz", { desc = "Go Right" })
 
 vim.keymap.set("n", "<C-f>o", "<cmd>FlutterOutlineToggle<CR>", { desc = "Toggle Flutter Outline" })
+vim.keymap.set("n", "<C-f>r", "<cmd>FlutterRun<CR>", { desc = "Run Flutter Application" })
+vim.keymap.set("n", "<C-f>l", "<cmd>FlutterLogToggle<CR>", { desc = "Toggle Flutter Logs" })
 
 vim.keymap.set("n", "<leader>lf", function()
 	vim.diagnostic.open_float()

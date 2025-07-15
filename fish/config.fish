@@ -29,3 +29,5 @@ end
 zoxide init fish | source
 set --export PATH $HOME/.flutter/flutter/bin/ $PATH
 set --export PATH $HOME/.ultimmc/UltimMC/bin/ $PATH
+set --export PATH $HOME/Android/Sdk/platform-tools/ $PATH
+set --export PATH $HOME/Android/Sdk/cmdline-tools/latest/bin/ $PATH

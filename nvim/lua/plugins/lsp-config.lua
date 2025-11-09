@@ -199,7 +199,7 @@ return {
 			},
 		},
 		config = function()
-			require("lspconfig").qmlls.setup({
+			vim.lsp.config("qmlls", {
 				cmd = { "qmlls", "-E" },
 			})
 			-- Brief aside: **What is LSP?**
@@ -379,8 +379,53 @@ return {
 			--  By default, Neovim doesn't support everything that is in the LSP specification.
 			--  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
 			--  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
+			local on_attach = function(_, bufnr)
+				-- NOTE: Remember that lua is a real programming language, and as such it is possible
+				-- to define small helper and utility functions so you don't have to repeat yourself
+				-- many times.
+				--
+				-- In this case, we create a function that lets us more easily define mappings specific
+				-- for LSP related items. It sets the mode, buffer and description for us each time.
+				local nmap = function(keys, func, desc)
+					if desc then
+						desc = "LSP: " .. desc
+					end
+
+					vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
+				end
+
+				nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+				nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+
+				nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+				nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+				nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+				nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+				nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+				nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+
+				-- See `:help K` for why this keymap
+				nmap("K", vim.lsp.buf.hover, "Hover Documentation")
+				nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
+
+				-- Lesser used LSP functionality
+				nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+				-- Create a command `:Format` local to the LSP buffer
+				vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
+					vim.lsp.buf.format()
+				end, { desc = "Format current buffer with LSP" })
+			end
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+			local gdscript_config = {
+				capabilities = capabilities,
+				on_attach = on_attach,
+				settings = {},
+			}
+			vim.lsp.config.gdscript = gdscript_config
+			vim.lsp.enable("gdscript")
+			-- require("lspconfig").gdscript.setup({ capabilities = capabilities })
 			-- Enable the following language servers
 			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 			--
@@ -613,6 +658,9 @@ return {
 				"query",
 				"vim",
 				"vimdoc",
+				"gdscript",
+				"godot_resource",
+				"gdshader",
 			},
 			-- Autoinstall languages that are not installed
 			auto_install = true,
@@ -623,7 +671,7 @@ return {
 				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
 				additional_vim_regex_highlighting = { "ruby" },
 			},
-			indent = { enable = true, disable = { "ruby" } },
+			indent = { enable = true, disable = { "ruby", "gdscript" } },
 		},
 		-- There are additional nvim-treesitter modules that you can use to interact
 		-- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -674,5 +722,9 @@ return {
 	},
 	{
 		"dart-lang/dart-vim-plugin",
+	},
+	{
+		"habamax/vim-godot",
+		event = "VimEnter",
 	},
 }

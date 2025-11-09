@@ -2,10 +2,13 @@ vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", {
 	desc = "Saving current file",
 })
 
-vim.keymap.set("n", "Esc", "<cmd>noh<CR>", { desc = "Remove the highlighting after search or exit from currrent mode" })
+vim.keymap.set("n", "<Esc>", ":noh<CR>", { desc = "Remove the highlighting after search or exit from currrent mode" })
 
 vim.keymap.set("n", "<c-d>", "<c-d>zz", { desc = "go half page down" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Go Half Page Up" })
+
+vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
+vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
 
 vim.keymap.set("n", "h", "hzz", { desc = "Go Left" })
 vim.keymap.set("n", "j", "jzz", { desc = "Go Down" })

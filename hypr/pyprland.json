@@ -6,9 +6,9 @@
 		"whatsapp": {
 			"command": "brave --app='https://web.whatsapp.com' --title=whatsapp",
 			"multi": false,
-			"size": "50% 75%",
+			"size": "80% 80%",
 			"lazy": false,
-			"position": "25% 12%"
+			"position": "10% 10%"
 		},
 		"Spotify": {
 			"command": "spotify",

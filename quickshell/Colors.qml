@@ -1,0 +1,1 @@
+/home/big/.cache/wal/Colors.qml

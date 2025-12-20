@@ -621,4 +621,46 @@ return {
 		"andweeb/presence.nvim",
 		opts = {},
 	},
+	{
+		"windwp/nvim-ts-autotag",
+		opts = {
+			opts = {
+				-- Defaults
+				enable_close = true, -- Auto close tags
+				enable_rename = true, -- Auto rename pairs of tags
+				enable_close_on_slash = false, -- Auto close on trailing </
+			},
+			-- Also override individual filetype configs, these take priority.
+			-- Empty by default, useful if one of the "opts" global settings
+			-- doesn't work well in a specific filetype
+			per_filetype = {
+				["html"] = {
+					enable_close = false,
+				},
+			},
+		},
+	},
+	{
+		"barrett-ruth/live-server.nvim",
+		build = "pnpm add -g live-server",
+		cmd = { "LiveServerStart", "LiveServerStop" },
+		config = true,
+	},
+	{
+		"kawre/leetcode.nvim",
+		build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
+		dependencies = {
+			-- include a picker of your choice, see picker section for more details
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+		},
+		opts = {
+			lang = "python",
+			editor = {
+				reset_previous_code = false, ---@type boolean
+				-- fold_imports = false, ---@type boolean
+			},
+			image_support = true,
+		},
+	},
 }

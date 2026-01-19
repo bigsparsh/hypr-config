@@ -1,5 +1,5 @@
   cat ~/.cache/wal/sequences
-  oh-my-posh init fish --config ~/.config/ohmyposh/zen.json | source
+  # oh-my-posh init fish --config ~/.config/ohmyposh/zen.json | source
 if status is-interactive
   alias r yazi
   alias v nvim
@@ -30,8 +30,9 @@ end
 
 zoxide init fish | source
 
-set --export PATH $HOME/.flutter/flutter/bin/ $PATH
-set --export PATH $HOME/Games/UltimMC/bin/ $PATH
+# set --export PATH $HOME/.flutter/flutter/bin/ $PATH
+set --export PATH $HOME/Games/UltimMC/UltimMC/bin/ $PATH
 # set --export PATH $HOME/Android/Sdk/platform-tools/ $PATH
 # set --export PATH $HOME/Android/Sdk/cmdline-tools/latest/bin/ $PATH
-source $HOME/Android/flutter.fish
+# source $HOME/Android/flutter.fish
+

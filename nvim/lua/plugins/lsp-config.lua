@@ -642,8 +642,8 @@ return {
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts
-		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+		-- In the new 'main' branch, the module is often just 'nvim-treesitter.config'
+		main = "nvim-treesitter.config",
 		opts = {
 			ensure_installed = {
 				"bash",
@@ -662,63 +662,39 @@ return {
 				"godot_resource",
 				"gdshader",
 			},
-			-- Autoinstall languages that are not installed
 			auto_install = true,
 			highlight = {
 				enable = true,
-				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-				--  If you are experiencing weird indenting issues, add the language to
-				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
 				additional_vim_regex_highlighting = { "ruby" },
 			},
 			indent = { enable = true, disable = { "ruby", "gdscript" } },
-		},
-		-- There are additional nvim-treesitter modules that you can use to interact
-		-- with nvim-treesitter. You should go explore a few and see what interests you:
-		--
-		--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-		--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-	},
-	{
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-		},
-		init = function()
-			local configs = require("nvim-treesitter.configs")
-			configs.setup({
-				textobjects = {
-					select = {
-						enable = true,
-						lookahead = true,
 
-						keymaps = {
-							["af"] = "@function.outer",
-							["if"] = "@function.inner",
-							["ac"] = "@class.outer",
-							["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-							["as"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
-						},
-						selection_modes = {
-							["@parameter.outer"] = "v",
-							["@function.outer"] = "V",
-							["@class.outer"] = "<c-v>",
-						},
-						include_surrounding_whitespace = true,
-					},
-					swap = {
-						enable = true,
-						swap_next = {
-							["<leader>a"] = "@parameter.inner",
-						},
-						swap_previous = {
-							["<leader>A"] = "@parameter.inner",
-						},
+			-- INTEGRATED TEXTOBJECTS (No separate plugin needed in 2026)
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true, -- Automatically jump forward to textobj
+					keymaps = {
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
 					},
 				},
-			})
-		end,
+				move = {
+					enable = true,
+					set_jumps = true, -- whether to set jumps in the jumplist
+					goto_next_start = {
+						["]m"] = "@function.outer",
+						["]]"] = "@class.outer",
+					},
+					goto_previous_start = {
+						["[m"] = "@function.outer",
+						["[["] = "@class.outer",
+					},
+				},
+			},
+		},
 	},
 	{
 		"dart-lang/dart-vim-plugin",

@@ -1,0 +1,19 @@
+{
+  "name": "weather",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "temp": "bun run index.ts | grep -e 'TEMP' | sed 's/TEMP:  //g'",
+    "icon": "bun run index.ts | grep -e 'ICON' | sed 's/ICON:  //g'"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^1.7.7"
+  }
+}

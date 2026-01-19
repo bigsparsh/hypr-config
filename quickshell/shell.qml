@@ -264,12 +264,13 @@ ShellRoot {
 
 
 
+
 ListView {
     id: verticalPlayerView
     anchors.centerIn: parent
 
     property int delegateHeight: 180 
-    width: 100 
+    width: 100
     height: delegateHeight 
     
     visible: count > 0 
@@ -314,57 +315,34 @@ ListView {
         id: delegateRoot
         width: verticalPlayerView.width
         height: verticalPlayerView.delegateHeight
-        
-        Rectangle {
-            anchors.fill: parent
-            anchors.margins: 5
-            color: "transparent" 
 
-            Column {
-                anchors.centerIn: parent
-                spacing: 30 
+				property string name0 : (modelData.trackTitle || "").toUpperCase().split(" ")[0] 
+				property string name1 : (modelData.trackTitle || "").toUpperCase().split(" ")[1] 
 
-                Item {
-                    width: trackText.height
-                    height: 100 
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: trackText
-                        text: (modelData.trackTitle || "").toUpperCase()
-                        
-                        color: Colors.color7
-                        font.pixelSize: 18
-                        font.family: 'SauceCodePro NF'
-                        
-                        width: 150 
-                        horizontalAlignment: Text.AlignHCenter
-                        elide: Text.ElideRight
-                        
-                        rotation: -90
-                        transformOrigin: Item.Center
-                        anchors.centerIn: parent
-                    }
-                }
+				property string trackname : (name0) + " " + ((name1 && (name0.length + name1.length < 11)) ? name1: "")
 
                 Rectangle {
-                    id: imgContainer
-                    width: 32.5
-                    height: 32.5
+										anchors.topMargin: 5
+										anchors.fill: parent
+										id: imgContainer
                     radius: width / 2
                     anchors.horizontalCenter: parent.horizontalCenter
                     clip: true
+										color: "transparent"
+										opacity: 0.25
 
 										Rectangle {
 											anchors.fill: parent
-											color: Colors.color550
+											color: Colors.color050
 											radius: img.width / 2
 											z: 10
 										}
                     
                     Image {
-                        id: img
-                        anchors.fill: parent
+                    width: 175
+										id: img
+                    height: 175
+                        // anchors.fill: parent
                         source: modelData.trackArtUrl || ""
                         fillMode: Image.PreserveAspectCrop
 
@@ -379,12 +357,86 @@ ListView {
 
                         RotationAnimation on rotation {
                             from: 0; to: 360
-                            duration: 10000
+                            duration: 25000
                             loops: Animation.Infinite
                             running: modelData.playbackState === MprisPlaybackState.Playing
                         }
                     }
                 }
+        
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: 5
+            color: "transparent" 
+
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 30 
+
+
+                Item {
+                    width: trackText.height
+                    height: 100 
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+
+                    Text {
+                        id: trackText
+												text: trackname
+												color: Colors.color7
+                        font.pixelSize: 18
+                        font.family: 'SauceCodePro NF'
+												font.weight: 500
+                        
+                        width: 125
+                        horizontalAlignment: Text.AlignHCenter
+                        clip: true
+                        
+                        rotation: -90
+                        transformOrigin: Item.Center
+                        anchors.centerIn: parent
+                    }
+                }
+
+										//       Rectangle {
+										//           id: imgContainer
+										//           width: 32.5
+										//           height: 32.5
+										//           radius: width / 2
+										//           anchors.horizontalCenter: parent.horizontalCenter
+										//           clip: true
+										//
+										// Rectangle {
+										// 	anchors.fill: parent
+										// 	color: Colors.color050
+										// 	radius: img.width / 2
+										// 	z: 10
+										// }
+										//
+										//           Image {
+										//               id: img
+										//               anchors.fill: parent
+										//               source: modelData.trackArtUrl || ""
+										//               fillMode: Image.PreserveAspectCrop
+										//
+										//               layer.enabled: true
+										//               layer.effect: OpacityMask {
+										//                   maskSource: Rectangle {
+										//                       width: img.width
+										//                       height: img.height
+										//                       radius: img.width / 2
+										//                   }
+										//               }
+										//
+										//               RotationAnimation on rotation {
+										//                   from: 0; to: 360
+										//                   duration: 10000
+										//                   loops: Animation.Infinite
+										//                   running: modelData.playbackState === MprisPlaybackState.Playing
+										//               }
+										//           }
+										//       }
             }
         }
 
@@ -411,10 +463,13 @@ ListView {
 					anchors.right: parent.right
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
-					text: "-"
+					// id: cavaViz
+					text: "###"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
+							cmdoer.command = ["exec", "/home/big/scripts/random-wall.sh"]
+							cmdoer.running = true
 						}
 					}
 				} // Text WLP
@@ -427,7 +482,7 @@ ListView {
 					anchors.right: parent.right
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
-					text: "-"
+					text: "###"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -443,10 +498,12 @@ ListView {
 					anchors.right: parent.right
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
-					text: "-"
+					text: "SPO"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
+							cmdoer.command = ["pypr", "toggle", "Spotify"]
+							cmdoer.running = true
 						}
 					}
 				} // Text WLP
@@ -459,10 +516,12 @@ ListView {
 					anchors.right: parent.right
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
-					text: "-"
+					text: "WSP"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
+							cmdoer.command = ["pypr", "toggle", "whatsapp"]
+							cmdoer.running = true
 						}
 					}
 				} // Text WLP
@@ -475,7 +534,7 @@ ListView {
 					anchors.right: parent.right
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
-					text: "-"
+					text: "###"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -491,11 +550,11 @@ ListView {
 					anchors.right: parent.right
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
-					text: "-"
+					text: "TCV"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
-							cmdoer.command = ["exec", "/home/big/scripts/random-wall.sh"]
+							cmdoer.command = ["sh", "/home/big/scripts/toggle-cava.sh"]
 							cmdoer.running = true
 						}
 					}
@@ -568,7 +627,7 @@ ListView {
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
-							cmdoer.command = ["exec", "/home/big/scripts/random-wall.sh"]
+							cmdoer.command = ["sh", "/home/big/scripts/random-wall.sh"]
 							cmdoer.running = true
 						}
 					}
@@ -603,6 +662,17 @@ ListView {
 				Component.onCompleted: running = true
 			} // Process
 
+			// Process {
+			// 	id: cavaProc
+			// 	command: ["sh", "/home/big/scripts/cava.sh"]
+			// 	running: true
+			// 	stdout: SplitParser {
+			// 		onRead: data => {
+			// 			cavaViz.text = data[0] + data[1] + data[2]
+			// 		}
+			// 	}
+			// } // Process
+
 			Process {
 				id: cmdoer
 				command: []
@@ -611,7 +681,7 @@ ListView {
 
 			Process {
 				id: dateProc
-				command: ["date", "+%^a %^b %e %H:%M:%S %Z %y"]
+				command: ["date", "+%^a %^b %d %H:%M:%S %Z %y"]
 				running: true
 				stdout: StdioCollector {
 					onStreamFinished: {
@@ -649,6 +719,7 @@ ListView {
 					batStatusProc.running = true
 				}
 			} // Timer
+
 
 		} // Column
 	}

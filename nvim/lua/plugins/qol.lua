@@ -11,6 +11,10 @@ return {
 		},
 	},
 	{
+		"3rd/image.nvim",
+		opts = {},
+	},
+	{
 		"norcalli/nvim-colorizer.lua",
 		opts = {},
 	},
@@ -653,14 +657,18 @@ return {
 			-- include a picker of your choice, see picker section for more details
 			"nvim-lua/plenary.nvim",
 			"MunifTanjim/nui.nvim",
+			"3rd/image.nvim",
 		},
 		opts = {
-			lang = "python",
+			lang = "cpp",
+			description = {
+				position = "right",
+			},
 			editor = {
 				reset_previous_code = false, ---@type boolean
 				-- fold_imports = false, ---@type boolean
 			},
-			image_support = true,
+			image_support = false,
 		},
 	},
 }

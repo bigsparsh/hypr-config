@@ -36,3 +36,12 @@ set --export PATH $HOME/Games/UltimMC/UltimMC/bin/ $PATH
 # set --export PATH $HOME/Android/Sdk/cmdline-tools/latest/bin/ $PATH
 # source $HOME/Android/flutter.fish
 
+
+# string match -q "$TERM_PROGRAM" "kiro" and . (kiro --locate-shell-integration-path fish)
+
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
+
+set -gx PATH $HOME/.config/herd-lite/bin $PATH
+
+# OpenClaw Completion
+# openclaw completion --shell fish | source

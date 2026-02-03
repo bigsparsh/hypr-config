@@ -205,7 +205,7 @@ input {
     kb_layout = us
     kb_variant =
     kb_model =
-    kb_options = caps:numlock
+    kb_options =
     kb_rules =
 
     follow_mouse = 1
@@ -244,9 +244,7 @@ bind = $mainMod SHIFT, W, exec, /home/big/scripts/random-wall.sh
 bind = $mainMod SHIFT, Q, exec, qbittorrent
 bind = $mainMod SHIFT, P, exec, hyprshot -m region -o ~/Screenshots/,
 bind = $mainMod, E, exec, $fileManager
-bind = $mainMod, F, fullscreen
-bind = $mainMod SHIFT, F, fullscreenstate, 0 2
-bind = $mainMod CTRL, F, fullscreen, 1
+bind = $mainMod, F, fullscreen,
 bind = $mainMod, R, exec, rofi -show run -show-icons
 bind = $mainMod shift, space, togglefloating,
 bind = $mainMod, D, exec, $menu
@@ -320,12 +318,7 @@ bindl=, XF86AudioPrev, exec, playerctl previous
 # windowrule = float,class:^(kitty)$,title:^(kitty)$
 
 # Ignore maximize requests from apps. You'll probably like this.
-windowrule {
-  name = windowrule-1
-  suppress_event = maximize
-  match:class = .*
-}
-
+windowrule = suppressevent maximize, class:.*
 
 
 # Rule for WhatsApp to move to scratchpad
@@ -333,67 +326,22 @@ windowrule {
 # windowrulev2 = workspace special silent, title:^web.whatsapp.com
 
 # Rules for floating windows
-windowrule {
-  name = windowrule-2
-  float = on
-  match:title = ^Volume Control$
-}
+windowrulev2 = float, title:^Volume Control$
+windowrulev2 = float, title:^Bluetooth Devices$
+windowrulev2 = float, title:^Network Connections$
+windowrulev2 = float, class:^feh$
 
-windowrule {
-  name = windowrule-3
-  float = on
-  match:title = ^Bluetooth Devices$
-}
+windowrulev2 = float, class:^brave-web.whatsapp.com__-Default$
+windowrulev2 = size 50% 40%, class:^brave-web.whatsapp.com__-Default$
+windowrulev2 = workspace special silent, title:^web.whatsapp.com$
+windowrulev2 = center, title:^web.whatsapp.com$
 
-windowrule {
-  name = windowrule-4
-  float = on
-  match:title = ^Network Connections$
-}
-
-windowrule {
-  name = windowrule-5
-  float = on
-  match:class = ^feh$
-}
-
-
-windowrule {
-  name = windowrule-6
-  float = on
-  size = (monitor_w*0.5) (monitor_h*0.4)
-  match:class = ^brave-web.whatsapp.com__-Default$
-}
-
-windowrule {
-  name = windowrule-7
-  workspace = special silent
-  center = on
-  match:title = ^web.whatsapp.com$
-}
-
-
-windowrule {
-  name = windowrule-8
-  float = on
-  workspace = special silent
-  center = on
-  match:class = ^Spotify$
-}
-
+windowrulev2 = float, class:^Spotify$
+windowrulev2 = workspace special silent, class:^Spotify$
+windowrulev2 = center, class:^Spotify$
 
 bind = $mainMod, W, exec, pypr toggle whatsapp && hyptctl dispatch bringactivetotop
 bind = $mainMod, S, exec, pypr toggle Spotify && hyptctl dispatch bringactivetotop
 
 # Fix some dragging issues with XWayland
-windowrule {
-  name = windowrule-9
-  no_focus = on
-  match:class = ^$
-  match:title = ^$
-  match:xwayland = 1
-  match:float = 1
-  match:fullscreen = 0
-  match:pin = 0
-}
-
+windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0

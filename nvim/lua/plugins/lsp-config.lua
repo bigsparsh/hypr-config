@@ -449,6 +449,36 @@ return {
 				-- ts_ls = {},
 				--
 
+				ts_ls = {
+					init_options = {
+						preferences = {
+							includeCompletionsForModuleExports = true,
+							includeCompletionsForImportStatements = true,
+							includeCompletionsWithSnippetText = true,
+							includeAutomaticOptionalChainCompletions = true,
+							includeCompletionsWithInsertText = true,
+							importModuleSpecifierPreference = "shortest",
+							allowIncompleteCompletions = true,
+						},
+					},
+					settings = {
+						typescript = {
+							inlayHints = {
+								includeInlayParameterNameHints = "all",
+								includeInlayFunctionParameterTypeHints = true,
+								includeInlayVariableTypeHints = true,
+							},
+						},
+						javascript = {
+							inlayHints = {
+								includeInlayParameterNameHints = "all",
+								includeInlayFunctionParameterTypeHints = true,
+								includeInlayVariableTypeHints = true,
+							},
+						},
+					},
+				},
+
 				lua_ls = {
 					-- cmd = { ... },
 					-- filetypes = { ... },
@@ -481,6 +511,7 @@ return {
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"prettierd", -- Fast prettier daemon for JS/TS
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -532,11 +563,13 @@ return {
 			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
-				-- Conform can also run multiple formatters sequentially
-				-- python = { "isort", "black" },
-				--
-				-- You can use 'stop_after_first' to run the first available formatter from the list
-				-- javascript = { "prettierd", "prettier", stop_after_first = true },
+				javascript = { "prettierd", "prettier", stop_after_first = true },
+				typescript = { "prettierd", "prettier", stop_after_first = true },
+				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+				typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+				json = { "prettierd", "prettier", stop_after_first = true },
+				css = { "prettierd", "prettier", stop_after_first = true },
+				html = { "prettierd", "prettier", stop_after_first = true },
 			},
 		},
 	},
@@ -615,6 +648,8 @@ return {
 				-- By default, you may press `<c-space>` to show the documentation.
 				-- Optionally, set `auto_show = true` to show the documentation after a delay.
 				documentation = { auto_show = false, auto_show_delay_ms = 500 },
+				-- Increase timeout for LSP to resolve completion items with auto-imports
+				accept = { resolve_timeout_ms = 200 },
 			},
 
 			sources = {
@@ -649,8 +684,13 @@ return {
 				"bash",
 				"dart",
 				"c",
+				"css",
+				"tsx",
+				"typescript",
+				"javascript",
 				"diff",
 				"html",
+				"json",
 				"lua",
 				"luadoc",
 				"markdown",

@@ -1,0 +1,16 @@
+{
+	"pyprland": {
+		"plugins": ["scratchpads", "magnify"]
+	},
+	"scratchpads": {
+		"whatsapp": {
+			"command": "brave --app='https://web.whatsapp.com' --title=whatsapp",
+			"multi": false,
+			"size": "80% 80%",
+			"lazy": false,
+			"position": "10% 10%",
+			"animation": ""
+		}
+	}
+
+}

@@ -44,4 +44,4 @@ set --export PATH $HOME/Games/UltimMC/UltimMC/bin/ $PATH
 set -gx PATH $HOME/.config/herd-lite/bin $PATH
 
 # OpenClaw Completion
-# openclaw completion --shell fish | source
+source "/home/big/.openclaw/completions/openclaw.fish"

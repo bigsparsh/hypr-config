@@ -18,6 +18,7 @@ ShellRoot {
 	property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 9) ?? null) != null
 
 	property int volumeLevel: 0
+	property int brightnessLevel: 0
 	property var player: Mpris.players.values
 
 	PanelWindow {
@@ -235,7 +236,7 @@ ShellRoot {
 					anchors.right: parent.right
 					font.family: "SauceCodePro NF"
 					font.pixelSize: 15
-					text: "009"
+					text: Hyprland.focusedWorkspace?.id == 10 ? "C10" : "CW" + Hyprland.focusedWorkspace?.id
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -252,11 +253,22 @@ ShellRoot {
 					anchors.right: parent.right
 					font.family: "SauceCodePro NF"
 					font.pixelSize: 15
-					text: "010"
+					text: brightnessLevel == 100 ? "LIT" : "L" + brightnessLevel
 					MouseArea {
 						anchors.fill: parent
-						onClicked: {
+						pressAndHoldInterval: 100
+						onClicked: (mouse) => {
 							Hyprland.dispatch("workspace 10")
+						}
+						onWheel: (wheel) => {
+							print(brightnessLevel)
+							if (wheel.angleDelta.y > 0) {
+								brightnessUp.running = true
+								brightnessProc.running = true
+							} else if (wheel.angleDelta.y < 0) {
+								brightnessDown.running = true
+								brightnessProc.running = true
+							}
 						}
 					}
 				} // Text WP 10
@@ -464,7 +476,7 @@ ListView {
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
 					// id: cavaViz
-					text: "###"
+					text: "---"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -534,7 +546,7 @@ ListView {
 					anchors.right: parent.right
 					font.pixelSize: 15
 					font.family: "SauceCodePro NF"
-					text: "###"
+					text: "---"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -636,6 +648,18 @@ ListView {
 			}
 
 			Process {
+				id: brightnessUp
+				command: ["brightnessctl", "set", "10%+"]
+				running: false
+			} // Process
+
+			Process {
+				id: brightnessDown
+				command: ["brightnessctl", "set", "10%-"]
+				running: false
+			} // Process
+
+			Process {
 				id: volControlUp
 				command: ["wpctl",  "set-volume",  "-l",  "1" ,"@DEFAULT_AUDIO_SINK@", "5%+"]
 				running: false
@@ -657,6 +681,18 @@ ListView {
 						if (match) {
 							volumeLevel = Math.round(parseFloat(match[1]) * 100)
 						}
+					}
+				}
+				Component.onCompleted: running = true
+			} // Process
+
+			Process {
+				id: brightnessProc
+				command: ["sh", "-c", "brightnessctl -m | awk -F, '{print $4}'"]
+				stdout: SplitParser {
+					onRead: data => {
+						if (!data) return
+						brightnessLevel = data.split("%")[0]
 					}
 				}
 				Component.onCompleted: running = true
@@ -703,7 +739,7 @@ ListView {
 				stdout: StdioCollector {
 					onStreamFinished: {
 
-						batStatus.text = this.text.split("\n")[0] == "Discharging" ? "D" + ( parseInt(this.text.split("\n")[1], 10) == 100 ? "FL" : parseInt(this.text.split("\n")[1], 10) ) : this.text.split("\n")[0] == "Full" ? "BFL" : "C" + ( parseInt(this.text.split("\n")[1], 10) == 100 ? "FL" : parseInt(this.text.split("\n")[1], 10) )
+						batStatus.text = this.text.split("\n")[0] == "Discharging" ? "D" + ( parseInt(this.text.split("\n")[1], 10) >= 100 ? "FL" : parseInt(this.text.split("\n")[1], 10) ) : this.text.split("\n")[0] == "Full" ? "BFL" : "C" + ( parseInt(this.text.split("\n")[1], 10) >= 100 ? "FL" : parseInt(this.text.split("\n")[1], 10) )
 
 						batStatus.color= (this.text.split("\n")[0] == "Discharging" && parseInt(this.text.split("\n")[1]) < 10) ? "red" : (hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8)
 					}

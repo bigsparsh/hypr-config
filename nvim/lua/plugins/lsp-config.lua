@@ -743,4 +743,14 @@ return {
 		"habamax/vim-godot",
 		event = "VimEnter",
 	},
+	{
+		"mrcjkb/rustaceanvim",
+		version = "^8", -- Recommended
+		lazy = false, -- This plugin is already lazy
+	},
+	{
+		"adibhanna/laravel.nvim",
+		lazy = true,
+		opts = {},
+	},
 }

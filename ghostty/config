@@ -19,7 +19,7 @@
 # ==========================
 # # The config file consists of simple key-value pairs,
 # # separated by equals signs.
-font-family = SauceCodePro NF
+font-family = FiraCode NF
 window-padding-x = 10
 window-padding-y = 10
 
@@ -27,6 +27,9 @@ confirm-close-surface = false
 font-size = 17
 
 background-opacity = 0.90
+# Smoothly dim the terminal when it loses focus
+focus-follows-mouse = true
+unfocused-split-opacity = 0.7
 #
 # # Spacing around the equals sign does not matter.
 # # All of these are identical:

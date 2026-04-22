@@ -18,22 +18,4 @@ QtObject {{
 	readonly property color color13: "{color13}"
 	readonly property color color14: "{color14}"
 	readonly property color color15: "{color15}"
-
-
-	readonly property color color050: "{color0}88"
-	readonly property color color150: "{color1}88"
-	readonly property color color250: "{color2}88"
-	readonly property color color350: "{color3}88"
-	readonly property color color450: "{color4}88"
-	readonly property color color550: "{color5}88"
-	readonly property color color650: "{color6}88"
-	readonly property color color750: "{color7}88"
-	readonly property color color850: "{color8}88"
-	readonly property color color950: "{color9}88"
-	readonly property color color105: "{color10}88"
-	readonly property color color115: "{color11}88"
-	readonly property color color125: "{color12}88"
-	readonly property color color135: "{color13}88"
-	readonly property color color145: "{color14}88"
-	readonly property color color155: "{color15}88"
 }}

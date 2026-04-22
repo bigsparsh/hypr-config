@@ -187,7 +187,7 @@ ShellRoot {
 					font.family: "SauceCodePro NF"
 					font.pixelSize: 15
 					id: volume
-					text: volumeLevel == 100 ? "VFL" : "V" + volumeLevel
+					text: volumeLevel >= 100 ? "VFL" : "V" + volumeLevel
 					MouseArea {
 						anchors.fill: parent
 						pressAndHoldInterval: 100

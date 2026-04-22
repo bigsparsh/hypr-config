@@ -45,3 +45,9 @@ set -gx PATH $HOME/.config/herd-lite/bin $PATH
 
 # OpenClaw Completion
 source "/home/big/.openclaw/completions/openclaw.fish"
+
+# Android SDK paths
+set -gx ANDROID_HOME /opt/android-sdk
+fish_add_path $ANDROID_HOME/platform-tools
+fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin
+

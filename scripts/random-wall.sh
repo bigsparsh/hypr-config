@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-cd ~/Wallpapers
+cd ~/Pictures/Wallpapers
 image=$(ls -1 *.{jpeg,png} | shuf | head -1)
 
 awww img $image --transition-type random --transition-fps 120 -f Lanczos3 --transition-bezier 0.42,0,0.58,1.0

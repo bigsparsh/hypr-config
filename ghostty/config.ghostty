@@ -1,0 +1,14 @@
+
+font-family = CasycadiaCove NF
+window-padding-x = 10
+window-padding-y = 10
+
+confirm-close-surface = false
+font-size = 15
+
+background-opacity = 0.85
+
+focus-follows-mouse = true
+unfocused-split-opacity = 0.7
+custom-shader = shaders/sonic_boom_cursor.glsl
+custom-shader = shaders/cursor_sweep.glsl

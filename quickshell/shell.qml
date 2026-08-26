@@ -81,10 +81,10 @@ ShellRoot {
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 1) ?? null) != null
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
+					anchors.left: parent.left
 					id: hour
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -98,10 +98,10 @@ ShellRoot {
 					font.weight: isActive ? 1000 : 500
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 2) ?? null) != null
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
+					anchors.left: parent.left
 					id: minute
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -115,10 +115,10 @@ ShellRoot {
 					font.weight: isActive ? 1000 : 500
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 3) ?? null) != null
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
+					anchors.left: parent.left
 					id: day
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -132,10 +132,10 @@ ShellRoot {
 					font.weight: isActive ? 1000 : 500
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 4) ?? null) != null
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
+					anchors.left: parent.left
 					id: date
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -149,10 +149,10 @@ ShellRoot {
 					font.weight: isActive ? 1000 : 500
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 5) ?? null) != null
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
+					anchors.left: parent.left
 					id: month
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -166,10 +166,10 @@ ShellRoot {
 					font.weight: isActive ? 1000 : 500
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 6) ?? null) != null
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
+					anchors.left: parent.left
 					id: year
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -183,9 +183,9 @@ ShellRoot {
 					font.weight: isActive ? 1000 : 500
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 7) ?? null) != null
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					anchors.left: parent.left
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					id: volume
 					text: volumeLevel >= 100 ? "VFL" : "V" + volumeLevel
 					MouseArea {
@@ -215,9 +215,9 @@ ShellRoot {
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 8) ?? null) != null
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					anchors.left: parent.left
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					text: Hyprland.focusedWorkspace?.id == 10 ? "C10" : "CW" + Hyprland.focusedWorkspace?.id
 					MouseArea {
 						anchors.fill: parent
@@ -233,9 +233,9 @@ ShellRoot {
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 9) ?? null) != null
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					anchors.left: parent.left
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					text: Hyprland.focusedWorkspace?.id == 10 ? "C10" : "CW" + Hyprland.focusedWorkspace?.id
 					MouseArea {
 						anchors.fill: parent
@@ -250,9 +250,9 @@ ShellRoot {
 					font.weight: isActive ? 1000 : 500
 					property var hasWorkspace: (Hyprland.workspaces.values.find(ws => ws.id === 10) ?? null) != null
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
-					anchors.right: parent.right
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					anchors.left: parent.left
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					text: brightnessLevel == 100 ? "LIT" : "L" + brightnessLevel
 					MouseArea {
 						anchors.fill: parent
@@ -398,7 +398,7 @@ ListView {
 												text: trackname
 												color: Colors.color7
                         font.pixelSize: 18
-                        font.family: 'SauceCodePro NF'
+                        font.family: 'CaskaydiaCove NF'
 												font.weight: 500
                         
                         width: 125
@@ -473,10 +473,10 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					// id: cavaViz
-					text: "---"
+					text: "000"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -492,9 +492,9 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
-					text: "###"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
+					text: "009"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -508,8 +508,8 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					text: "SPO"
 					MouseArea {
 						anchors.fill: parent
@@ -526,8 +526,8 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					text: "WSP"
 					MouseArea {
 						anchors.fill: parent
@@ -544,9 +544,9 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
-					text: "---"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
+					text: "006"
 					MouseArea {
 						anchors.fill: parent
 						onClicked: {
@@ -560,8 +560,8 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					text: "TCV"
 					MouseArea {
 						anchors.fill: parent
@@ -579,8 +579,8 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.family: "SauceCodePro NF"
-					font.pixelSize: 15
+					font.family: "CaskaydiaCove NF"
+					font.pixelSize: 14
 					text: "BTH"
 					MouseArea {
 						anchors.fill: parent
@@ -597,8 +597,8 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					text: "NET"
 					MouseArea {
 						anchors.fill: parent
@@ -615,8 +615,8 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					text: "QBT"
 					MouseArea {
 						anchors.fill: parent
@@ -633,8 +633,8 @@ ListView {
 					font.weight: isActive ? 1000 : 500
 					color: hasWorkspace ? (isActive ? Colors.color5 : Colors.color7) : Colors.color8
 					anchors.right: parent.right
-					font.pixelSize: 15
-					font.family: "SauceCodePro NF"
+					font.pixelSize: 14
+					font.family: "CaskaydiaCove NF"
 					text: "WLP"
 					MouseArea {
 						anchors.fill: parent

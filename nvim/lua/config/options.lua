@@ -27,7 +27,7 @@ vim.opt.splitbelow = true
 vim.opt.list = false
 -- vim.opt.listchars = { tab = ' ', trail = '·', nbsp = '␣' }
 
-vim.scrolloff = 15
+vim.opt.scrolloff = 15
 vim.opt.cmdheight = 0
 
 vim.api.nvim_create_autocmd("TextYankPost", {

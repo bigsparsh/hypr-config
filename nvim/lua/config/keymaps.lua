@@ -41,7 +41,7 @@ vim.keymap.set("n", "<C-k>", "<C-w>k", {
 	desc = "Move to top window",
 })
 
-vim.keymap.set("n", "<C-h>", "<C-w>h", {
+vim.keymap.set("n", "<C-j>", "<C-w>j", {
 	desc = "Move to bottom window",
 })
 
@@ -53,8 +53,12 @@ vim.keymap.set("n", "<C-n>", "<cmd>Neotree toggle right<CR>", {
 	desc = "Toggle Neotree on right",
 })
 
-local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
-vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
-vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
+local function telescope_builtin(picker)
+	return function()
+		require("telescope.builtin")[picker]()
+	end
+end
+vim.keymap.set("n", "<leader>ff", telescope_builtin("find_files"), { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>fg", telescope_builtin("live_grep"), { desc = "Telescope live grep" })
+vim.keymap.set("n", "<leader>fb", telescope_builtin("buffers"), { desc = "Telescope buffers" })
+vim.keymap.set("n", "<leader>fh", telescope_builtin("help_tags"), { desc = "Telescope help tags" })

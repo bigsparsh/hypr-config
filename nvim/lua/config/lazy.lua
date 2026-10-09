@@ -30,4 +30,6 @@ vim.cmd("colorscheme gruvbox")
 require("config.keymaps")
 require("config.options")
 
-require("transparent").clear_prefix("BufferLine")
+pcall(function()
+	require("transparent").clear_prefix("BufferLine")
+end)

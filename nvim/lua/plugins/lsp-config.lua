@@ -193,15 +193,12 @@ return {
 			-- Allows extra capabilities provided by blink.cmp
 			"saghen/blink.cmp",
 		},
-		opts = {
-			servers = {
-				dartls = {},
-			},
-		},
+		opts = {},
 		config = function()
 			vim.lsp.config("qmlls", {
 				cmd = { "qmlls", "-E" },
 			})
+			vim.lsp.enable("qmlls")
 			-- Brief aside: **What is LSP?**
 			--
 			-- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -281,32 +278,11 @@ return {
 					--  the definition of its *type*, not where it was *defined*.
 					map("grt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
 
-					-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-					---@param client vim.lsp.Client
-					---@param method vim.lsp.protocol.Method
-					---@param bufnr? integer some lsp support methods only in specific files
-					---@return boolean
-					local function client_supports_method(client, method, bufnr)
-						if vim.fn.has("nvim-0.11") == 1 then
-							return client:supports_method(method, bufnr)
-						else
-							return client.supports_method(method, { bufnr = bufnr })
-						end
-					end
-
-					-- The following two autocommands are used to highlight references of the
-					-- word under your cursor when your cursor rests there for a little while.
-					--    See `:help CursorHold` for information about when this is executed
-					--
-					-- When you move your cursor, the highlights will be cleared (the second autocommand).
+					-- Highlight references of the word under the cursor (Neovim 0.11+ API).
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if
 						client
-						and client_supports_method(
-							client,
-							vim.lsp.protocol.Methods.textDocument_documentHighlight,
-							event.buf
-						)
+						and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
 					then
 						local highlight_augroup =
 							vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
@@ -331,13 +307,10 @@ return {
 						})
 					end
 
-					-- The following code creates a keymap to toggle inlay hints in your
-					-- code, if the language server you are using supports them
-					--
-					-- This may be unwanted, since they displace some of your code
+					-- Toggle inlay hints, if the server supports them.
 					if
 						client
-						and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf)
+						and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf)
 					then
 						map("<leader>th", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
@@ -375,80 +348,30 @@ return {
 				},
 			})
 
-			-- LSP servers and clients are able to communicate to each other what features they support.
-			--  By default, Neovim doesn't support everything that is in the LSP specification.
-			--  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-			--  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-			local on_attach = function(_, bufnr)
-				-- NOTE: Remember that lua is a real programming language, and as such it is possible
-				-- to define small helper and utility functions so you don't have to repeat yourself
-				-- many times.
-				--
-				-- In this case, we create a function that lets us more easily define mappings specific
-				-- for LSP related items. It sets the mode, buffer and description for us each time.
-				local nmap = function(keys, func, desc)
-					if desc then
-						desc = "LSP: " .. desc
-					end
-
-					vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
-				end
-
-				nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-				nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-
-				nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-				nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-				nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-				nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-				nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-				nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
-
-				-- See `:help K` for why this keymap
-				nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-				nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
-
-				-- Lesser used LSP functionality
-				nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-				-- Create a command `:Format` local to the LSP buffer
-				vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-					vim.lsp.buf.format()
-				end, { desc = "Format current buffer with LSP" })
-			end
+			-- Broadcast blink.cmp capabilities to every server (Neovim 0.11+ native API).
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
+			vim.lsp.config("*", { capabilities = capabilities })
 
-			local gdscript_config = {
-				capabilities = capabilities,
-				on_attach = on_attach,
-				settings = {},
-			}
-			vim.lsp.config.gdscript = gdscript_config
-			vim.lsp.enable("gdscript")
-			-- require("lspconfig").gdscript.setup({ capabilities = capabilities })
-			-- Enable the following language servers
-			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-			--
-			--  Add any additional override configuration in the following tables. Available keys are:
-			--  - cmd (table): Override the default command used to start the server
-			--  - filetypes (table): Override the default list of associated filetypes for the server
-			--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-			--  - settings (table): Override the default settings passed when initializing the server.
-			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+			-- Per-server overrides. Keys: cmd, filetypes, capabilities, settings, init_options.
+			-- See `:help lspconfig-all` for pre-configured LSPs.
 			local servers = {
-				-- clangd = {},
-				-- gopls = {},
-				-- pyright = {},
-				-- rust_analyzer = {},
-				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-				--
-				-- Some languages (like typescript) have entire language plugins that can be useful:
-				--    https://github.com/pmizio/typescript-tools.nvim
-				--
-				-- But for many setups, the LSP (`ts_ls`) will work just fine
-				-- ts_ls = {},
-				--
-
+				basedpyright = {
+					settings = {
+						basedpyright = {
+							analysis = {
+								typeCheckingMode = "off",
+							},
+						},
+					},
+				},
+				ruff = {
+					init_options = {
+						settings = {
+							organizeImports = true,
+							fixAll = true,
+						},
+					},
+				},
 				ts_ls = {
 					init_options = {
 						preferences = {
@@ -480,55 +403,42 @@ return {
 				},
 
 				lua_ls = {
-					-- cmd = { ... },
-					-- filetypes = { ... },
-					-- capabilities = {},
 					settings = {
 						Lua = {
 							completion = {
 								callSnippet = "Replace",
 							},
-							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-							-- diagnostics = { disable = { 'missing-fields' } },
 						},
 					},
 				},
+				gdscript = {},
+				dartls = {},
 			}
 
-			-- Ensure the servers and tools above are installed
-			--
-			-- To check the current status of installed tools and/or manually install
-			-- other tools, you can run
-			--    :Mason
-			--
-			-- You can press `g?` for help in this menu.
-			--
-			-- `mason` had to be setup earlier: to configure its options see the
-			-- `dependencies` table for `nvim-lspconfig` above.
-			--
-			-- You can add other tools here that you want Mason to install
-			-- for you, so that they are available from within Neovim.
-			local ensure_installed = vim.tbl_keys(servers or {})
-			vim.list_extend(ensure_installed, {
-				"stylua", -- Used to format Lua code
-				"prettierd", -- Fast prettier daemon for JS/TS
-			})
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+			for name, config in pairs(servers) do
+				config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, config.capabilities or {})
+				vim.lsp.config(name, config)
+			end
 
-			require("mason-lspconfig").setup({
-				ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-				automatic_installation = false,
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for ts_ls)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
+			-- Mason package names (not lspconfig names) for auto-install.
+			require("mason-tool-installer").setup({
+				ensure_installed = {
+					"basedpyright",
+					"ruff",
+					"typescript-language-server",
+					"lua-language-server",
+					"stylua",
+					"prettierd",
 				},
 			})
+
+			-- New mason-lspconfig API: auto-enable installed servers.
+			-- Custom settings above are already applied via vim.lsp.config().
+			require("mason-lspconfig").setup({
+				ensure_installed = {},
+				automatic_enable = true,
+			})
+			vim.lsp.enable(vim.tbl_keys(servers))
 		end,
 	},
 	{ -- Autoformat
@@ -563,6 +473,7 @@ return {
 			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
+				python = { "ruff_format", "ruff_organize_imports" },
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
 				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
@@ -661,88 +572,140 @@ return {
 
 			snippets = { preset = "luasnip" },
 
-			-- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-			-- which automatically downloads a prebuilt binary when enabled.
-			--
-			-- By default, we use the Lua implementation instead, but you may enable
-			-- the rust implementation via `'prefer_rust_with_warning'`
-			--
-			-- See :h blink-cmp-config-fuzzy for more information
-			fuzzy = { implementation = "lua" },
-
 			-- Shows a signature help window while you type arguments for a function
 			signature = { enabled = true },
 		},
 	},
-	{ -- Highlight, edit, and navigate code
+	{ -- Highlight, edit, and navigate code (nvim-treesitter `main` branch API)
 		"nvim-treesitter/nvim-treesitter",
+		lazy = false,
 		build = ":TSUpdate",
-		-- In the new 'main' branch, the module is often just 'nvim-treesitter.config'
-		main = "nvim-treesitter.config",
-		opts = {
-			ensure_installed = {
-				"bash",
-				"dart",
-				"c",
-				"css",
-				"tsx",
-				"typescript",
-				"javascript",
-				"diff",
-				"html",
-				"json",
-				"lua",
-				"luadoc",
-				"markdown",
-				"markdown_inline",
-				"query",
-				"vim",
-				"vimdoc",
-				"gdscript",
-				"godot_resource",
-				"gdshader",
-			},
-			auto_install = true,
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = { "ruby" },
-			},
-			indent = { enable = true, disable = { "ruby", "gdscript" } },
+		config = function()
+			-- Parsers are a one-time install (`:TSUpdate`); skip silently if
+			-- the `tree-sitter` CLI isn't available. Highlighting below still works.
+			if vim.fn.executable("tree-sitter") == 1 then
+				local ts = require("nvim-treesitter")
+				ts.install({
+					"bash",
+					"c",
+					"css",
+					"tsx",
+					"typescript",
+					"javascript",
+					"diff",
+					"html",
+					"json",
+					"lua",
+					"luadoc",
+					"markdown",
+					"markdown_inline",
+					"query",
+					"vim",
+					"vimdoc",
+					"python",
+					"gdscript",
+					"godot_resource",
+					"gdshader",
+				})
+			end
+			-- (no warning: existing parsers keep working without the CLI)
 
-			-- INTEGRATED TEXTOBJECTS (No separate plugin needed in 2026)
-			textobjects = {
-				select = {
-					enable = true,
-					lookahead = true, -- Automatically jump forward to textobj
-					keymaps = {
-						["af"] = "@function.outer",
-						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-						["ic"] = "@class.inner",
-					},
-				},
-				move = {
-					enable = true,
-					set_jumps = true, -- whether to set jumps in the jumplist
-					goto_next_start = {
-						["]m"] = "@function.outer",
-						["]]"] = "@class.outer",
-					},
-					goto_previous_start = {
-						["[m"] = "@function.outer",
-						["[["] = "@class.outer",
-					},
-				},
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("treesitter-enable", { clear = true }),
+				callback = function(args)
+					local ok = pcall(vim.treesitter.start, args.buf)
+					if ok then
+						vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end
+				end,
+			})
+		end,
+	},
+	{
+		-- Textobjects for the new main branch (separate plugin now)
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		event = "VeryLazy",
+		opts = {
+			select = {
+				lookahead = true,
+				selection_modes = {},
+			},
+		},
+		keys = {
+			{
+				"af",
+				mode = { "x", "o" },
+				function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
+				end,
+				desc = "Select function outer",
+			},
+			{
+				"if",
+				mode = { "x", "o" },
+				function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
+				end,
+				desc = "Select function inner",
+			},
+			{
+				"ac",
+				mode = { "x", "o" },
+				function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
+				end,
+				desc = "Select class outer",
+			},
+			{
+				"ic",
+				mode = { "x", "o" },
+				function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
+				end,
+				desc = "Select class inner",
+			},
+			{
+				"]m",
+				mode = "n",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
+				end,
+				desc = "Next function",
+			},
+			{
+				"]]",
+				mode = "n",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects")
+				end,
+				desc = "Next class",
+			},
+			{
+				"[m",
+				mode = "n",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects")
+				end,
+				desc = "Prev function",
+			},
+			{
+				"[[",
+				mode = "n",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer", "textobjects")
+				end,
+				desc = "Prev class",
 			},
 		},
 	},
 	{
 		"dart-lang/dart-vim-plugin",
 	},
-	{
-		"habamax/vim-godot",
-		event = "VimEnter",
-	},
+	-- {
+	-- 	"habamax/vim-godot",
+	-- 	event = "VimEnter",
+	-- },
 	{
 		"mrcjkb/rustaceanvim",
 		version = "^8", -- Recommended
@@ -752,5 +715,21 @@ return {
 		"adibhanna/laravel.nvim",
 		lazy = true,
 		opts = {},
+	},
+	{
+		"Mathijs-Bakker/godotdev.nvim",
+		dependencies = { "nvim-treesitter" },
+		opts = {
+			formatter = true,
+		},
+		config = function(_, opts)
+			require("godotdev").setup(opts)
+
+			-- Handy keymaps for godotdev actions
+			vim.keymap.set("n", "<leader>gr", "<cmd>GodotRunProject<cr>", { desc = "Godot: Run Project" })
+			vim.keymap.set("n", "<leader>gs", "<cmd>GodotRunCurrentScene<cr>", { desc = "Godot: Run Scene" })
+			vim.keymap.set("n", "<leader>gt", "<cmd>GodotSceneTree<cr>", { desc = "Godot: Scene Tree" })
+			vim.keymap.set("n", "<leader>gd", "<cmd>GodotDocsCursor<cr>", { desc = "Godot: Docs Under Cursor" })
+		end,
 	},
 }

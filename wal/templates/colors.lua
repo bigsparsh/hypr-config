@@ -1,0 +1,8 @@
+COLOR0 = "{color0}"
+COLOR1 = "{color1}"
+COLOR2 = "{color2}"
+COLOR3 = "{color3}"
+COLOR4 = "{color4}"
+COLOR5 = "{color5}"
+COLOR6 = "{color6}"
+COLOR7 = "{color7}"
